@@ -112,7 +112,7 @@ func printObj(name string, obj interface{}) {
 }
 
 func processServiceAccounts() {
-	inclusterRaw, err := ioutil.ReadFile("./incluster.json")
+	inclusterRaw, err := ioutil.ReadFile("./resources/serviceaccounts/incluster.json")
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
@@ -121,7 +121,7 @@ func processServiceAccounts() {
 	json.Unmarshal(inclusterRaw, &incluster)
 	incluster, _ = resetMetadataAndStatus(incluster)
 
-	backupRaw, err := ioutil.ReadFile("./backup.json")
+	backupRaw, err := ioutil.ReadFile("./resources/serviceaccounts/backup.json")
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
