@@ -1,0 +1,17 @@
+{
+    "apiVersion": "v1",
+    "kind": "ServiceAccount",
+    "metadata": {
+        "creationTimestamp": "2018-03-06T21:33:21Z",
+        "name": "default",
+        "namespace": "nginx-example",
+        "resourceVersion": "23756",
+        "selfLink": "/api/v1/namespaces/nginx-example/serviceaccounts/default",
+        "uid": "fdfd5a6a-2185-11e8-b0cf-42010a960036"
+    },
+    "secrets": [
+        {
+            "name": "default-token-72v2r"
+        }
+    ]
+}
