@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	//	"github.com/evanphx/json-patch"
 	"github.com/pkg/errors"
 	"io/ioutil"
 	"k8s.io/apimachinery/pkg/api/equality"
@@ -105,8 +104,14 @@ func GetString(root map[string]interface{}, path string) (string, error) {
 	return str, nil
 }
 
-func main() {
+func printObj(name string, obj interface{}) {
+	fmt.Println()
+	fmt.Println(name, ":")
+	fmt.Println("   ", obj)
+	fmt.Println()
+}
 
+func processServiceAccounts() {
 	inclusterRaw, err := ioutil.ReadFile("./incluster.json")
 	if err != nil {
 		fmt.Println(err.Error())
@@ -155,25 +160,10 @@ func main() {
 		}
 	}
 
-	// Lives in the server
-	//jsonMergePatch, err := jsonpatch.CreateMergePatch(inclusterRaw, backupRaw)
-	//if err != nil {
-	//	fmt.Println(err.Error())
-	//	os.Exit(1)
-	//}
-
 	fmt.Println("\033[H\033[2J")
-	fmt.Println()
-	fmt.Println("incluster:")
-	fmt.Println("   ", incluster)
-	fmt.Println()
-	fmt.Println("backup:")
-	fmt.Println("   ", backup)
-	fmt.Println()
-	fmt.Println()
-	fmt.Println("desired:")
-	fmt.Println("   ", desired)
-	fmt.Println()
+	printObj("incluster", incluster)
+	printObj("backup", backup)
+	printObj("incluster", incluster)
 	desiredRaw, _ := json.Marshal(desired)
 
 	origThreeWayMergePatch, err := jsonmergepatch.CreateThreeWayJSONMergePatch(inclusterRaw, desiredRaw, nil)
@@ -182,7 +172,10 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println("jsonmergepatch.CreateThreeWayJSONMergePatch(inclusterRaw, desiredRaw, nil) output:")
-	fmt.Println("   ", string(origThreeWayMergePatch))
+	printObj("jsonmergepatch.CreateThreeWayJSONMergePatch(inclusterRaw, desiredRaw, nil) output:", string(origThreeWayMergePatch))
 	fmt.Println("\n")
+}
+
+func main() {
+	processServiceAccounts()
 }
