@@ -176,6 +176,35 @@ func processServiceAccounts() {
 	fmt.Println("\n")
 }
 
+// processDeployments will look for substantive differences, returning true or false if they're found
+func processDeployments() {
+	inclusterRaw, err := ioutil.ReadFile("./resources/deployments/incluster.json")
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
+	var incluster *unstructured.Unstructured
+	json.Unmarshal(inclusterRaw, &incluster)
+	incluster, _ = resetMetadataAndStatus(incluster)
+
+	backupRaw, err := ioutil.ReadFile("./resources/deployments/backup.json")
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
+	var backup *unstructured.Unstructured
+	json.Unmarshal(backupRaw, &backup)
+	backup, _ = resetMetadataAndStatus(backup)
+
+	areEqual := fallbackChecker(incluster, backup)
+	fmt.Println("In-cluster and backup deployments are equal: ", areEqual)
+}
+
+func fallbackChecker(incluster, backup *unstructured.Unstructured) bool {
+	return equality.Semantic.DeepEqual(incluster, backup)
+}
+
 func main() {
 	processServiceAccounts()
+	processDeployments()
 }
